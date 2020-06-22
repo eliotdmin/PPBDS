@@ -1,6 +1,6 @@
 ---
 output_yaml:
-  - _output.yml
+  - output.yml
 ---
 
 # Two Parameters {#two-parameters}
