@@ -552,7 +552,7 @@ lm(data = trains, att_end ~ treatment) %>% tidy(conf.int = TRUE) %>%
 
 ```
 
-Recall our earlier discussion regarding the difference between confidence intervals and prediction intervals: while the former accounts for *parameter uncertainty*, the latter accounts for *unmodeled variation*. We've already calculated the confidence intervals for the ATE, so let's go ahead and calculate the prediction intervals — in this case, the prediction intervals would give us a range of values that we'd expect treatment to have on a brand-new individual.
+Recall our earlier discussion regarding the difference between confidence intervals and prediction intervals: while the former accounts for *parameter uncertainty*, the latter accounts for *unmodeled variation*. We've already calculated the confidence intervals for the ATE, so let's go ahead and calculate the prediction intervals — in this case, the prediction intervals would give us a range of values that we'd expect treatment to have on a brand-new individual. Add.
 
 ```{r}
 
