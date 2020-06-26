@@ -420,13 +420,19 @@ Recall our discussion regarding the wider confidence intervals for republican su
 
 #### Validity
 
-We just spent a ton of time analyzing the relationship between party and income in Enos' study. Although we have already accounted for parameter uncertainty (the confidence intervals) and unmodeled variation uncertainty (the prediction intervals), we are not sure that we have accounted for the *validity* of his model — that is, whether the ideas he wishes to capture are truly represented by the data he collects.
+We just spent a ton of time analyzing the relationship between party and income in Enos' study. Although we have already accounted for parameter uncertainty (the confidence intervals) and unmodeled variation uncertainty (the prediction intervals), we have not accounted for the *validity* of his model — that is, whether the ideas he wishes to capture are truly represented by the data he collects.
 
 For example, take the `income` variable. How do you answer this question if you, having made a fortune years ago, are currently earning an income of zero? How do you answer it if you are one-half of a married couple — is it both your incomes combined, your incomes divided by two, or some other calculation? Enos really means to distinguish between poorer and richer subjects through this measure, but the ambiguity in the question "what is your income" makes us doubt whether the income figures truly help us distinguish between these two types of people.
 
 Another variable which, troublingly, raises concerns regarding validity is the `att_end` variable. Through this variable, Enos hopes to measure how people's political attitudes change, and the implications this could have for the political landscape of the United States— however, what he is truly measuring is how people respond to his specific survey questions, which required responses on a scale of 1-5 and were aggregated and scaled to a total out of 15. What if he asked people to respond on a scale of 1-3, or a scale of 1-30? We do not mean to say that his choices were unreasonable — rather, we think it is important to note that he would have gotten very different answers using different reasonable choices. **If you're running Trump's 2020 campaign, you don't care about how people filled out Enos' specific survey. You care about the statistics that data claims to represent**.
 
 It is always important to keep the problem of validity in the back of our minds as we investigate data sets and how the data within these sets are collected. Given the many factors — those we are aware of and those we are not aware of — that go into any kind of data collection, there is no way to guarantee 100 percent validity.
+
+#### Unknown unknowns
+
+Yet another area of uncertainty that might not be immediately obvious is the possibiity of unknown unknowns — that is, all the things that might change with time. How do we know that our model — which relies heavily on figures like income and party affiliation — will still be able to draw conclusions about America 50 years from now? Mass migrations, political revolutions, and world wars are just a few of the things that could render all the conclusions we draw from the `trains` dataset moot. And, other than expanding our confidence intervals to the point of uselessness, there's no way to account for the unknown unknowns. 
+
+In short, *while we can accept the model as representative of the United States at or around 2012 (the year in which Enos conducted his study), we cannot reasonably extrapolate that to the far future*.
 
 <!-- EM: Is the above statement true? --> 
 
@@ -603,15 +609,13 @@ tibble(subject = 1:7,
 
 There are various sources of uncertainties and problems that have addressed in previous chapters and again in this chapter. It's important that you always have these in the back of your mind when working with data:
 
-1) 
-2) Parameter uncertainty.
-3) Unmodeled variation
+1) *Validity*. At the surface level, parameter names might not invoke too much thought — but once you really sit down and think about the story the numbers are trying to tell, it's not always the case that the numbers deserve to tell that story. In our earlier discussion regarding `income` and `att_end`, the conclusions we draw from these data might be misleading just because the way they were collected or computed inevitably change these conclusions. Even when there's nothing WRONG with a setup, we need to keep in mind that the smallest differences 
 
-5) The world is changing, and people 50 years from now will act differently and have vastly different characteristics; in the case of the trains dataset, it wouldn't be unreasonable to expect completely different combinations of income and party affiliation. That would render our mean income, median ratio, and prediction intervals for both those measures useless.
+2) When we dive deeper into the data, we run into the issue of *parameter uncertainty*, which is the uncertainty associated with our analysis of summary parameters, such as mean, median, and range. In our above analysis with the `trains` dataset, we account for parameter uncertainty using confidence intervals.
 
-  + First, validity. Are the variables/numbers we have accurately capturing the concepts we care about.
-  + Third, parameter uncertainty. Even if the model has correct form, we still need to estimate the parameters. We will never know them perfectly. If our forecasts assume that we do, then we will be over-confident. Example: Confidence interval for the mean.
-  + Fourth, unmodeled variation. (This may be difficult to talk about since we don't (?) write down formulas with error terms.) Even if we have perfect parameter estimates for a model structure which matches the unknown data generating mechanism, we still won't make perfect predictions. Some randomness is intrinsic. Example: prediction for an individual.
+3) As great as confidence intervals are, they don't capture the uncertainty of using summary statistics to predict parameter values of random individuals. We are more sure, for example, about the range of possible incomes for the mean income of American democrats than we are about the range of possible incomes for a single American democrat, whose income could stray far from the mean democrat income. This *unmodeled variation*, or variation between data points that is not fully captured by bootstrapping, deserves much consideration when dealing with data.
+
+4) *Unknown unknowns* are an especially unavoidable source of uncertainty. The world is changing, and people 50 years from now might act differently and have vastly different lifestyles and characteristics; in the case of the `trains` dataset, it wouldn't be unreasonable to expect completely different combinations of income and party affiliation. That would render our mean income, median ratio, and prediction intervals for both those measures useless.
 
 ## Testing is Evil
 
