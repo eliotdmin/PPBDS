@@ -73,7 +73,7 @@ median_income_value_republican <- median(trains %>% filter(party == "Republican"
 
 ```
 
-Recall how we constructed bootstrap distributions for select parameters through sampling with replacement in ch7. Through this bootstrapping process, we were able to construct *confidence intervals* for these parameters. Remember, confidence intervals are a tool to help us identify *parameter uncertainty*, which is the degree to which we are confident in these approximations of the true values using limited data.
+Recall how we constructed bootstrap distributions for select parameters through sampling with replacement in ch7. Through this bootstrapping process, we were able to construct *confidence intervals* for these parameters. Remember, confidence intervals are a tool to help us identify *parameter uncertainty*, which is the degree to which we are confident in these approximations of the true values — say, the true average income of all United States residents — using limited data.
 
 Using the limited data in the `trains` dataset as representative of homogeneous white populations of the United States, this type of resampling will allow us to pinpoint a *true value* for a given parameter with a certain degree of confidence — this could, for example, be the true average income of Boston commuters, or the true percentage of Boston commuters that are Republican (refer back to chapter 7 for a refresher on how this works out mathematically). 
 
@@ -124,15 +124,13 @@ ggplot(x, aes(x = mean_income)) +
 
 ```
 
-Hopefully, this was a helpful recap of what was covered in chapter 7.
-
-## Two Parameters
-
 We've calculated the mean income for each bootstrapped replicate and constructed a nice distribution graphic for it — and this is all well and good, but it's exactly the same thing that we did back in ch7. Extending our analysis of income to two parameters would allow us to investigate new trends and patterns in the data. 
 
 What if we wanted to extend this calculation to distinguish between, say, democratic and republican subjects in Enos' study?
 
-This will require a bit of additional work but will not require any more bootstrapping. First, we'll slightly modify the `get_mean_income()` function: we'll add an input to the function, `whichParty`, that will allow the function to distinguish between subjects that identified as democrat and those that identified as republican.
+## Two Parameters
+
+Sampling with respect to two parameters will require a bit of additional work but will not require any more bootstrapping. First, we'll slightly modify the `get_mean_income()` function: we'll add an input to the function, `whichParty`, that will allow the function to distinguish between subjects that identified as democrat and those that identified as republican.
 
 ```{r}
 
@@ -249,10 +247,6 @@ fake_data_bootstrap
 One thing we can notice right away is the wider spread of `mean_income_republican` in spite of the fact that all the income values were randomly generated within the same number range. Because each of the three republican income values carried so much weight, duplicating one or omitting one in a bootstrap sample more easily led to extreme `mean_income_republican` values.
 
 In short: If we have fewer data points, bootstrap parameter calculations are more likely to be further from the true values, and our confidence intervals will be wider as a result. It's important to understand the mechanics behind these relationships as we continue our work with confidence intervals going forward.
-
-## Bootstrapping as it relates to probability
-
-
 
 ## Calculating a third parameter
 
@@ -430,10 +424,11 @@ We just spent a ton of time analyzing the relationship between party and income 
 
 For example, take the `income` variable. How do you answer this question if you, having made a fortune years ago, are currently earning an income of zero? How do you answer it if you are one-half of a married couple — is it both your incomes combined, your incomes divided by two, or some other calculation? Enos really means to distinguish between poorer and richer subjects through this measure, but the ambiguity in the question "what is your income" makes us doubt whether the income figures truly help us distinguish between these two types of people.
 
-Another variable which, troublingly, raises concerns regarding validity is the `att_end` variable. Through this variable, Enos hopes to measure how people's political attitudes change — however, what he is truly measuring is how people respond to his specific survey questions
-This is not to say his choices were unreasonable — rather, he would have gotten very different answers 
+Another variable which, troublingly, raises concerns regarding validity is the `att_end` variable. Through this variable, Enos hopes to measure how people's political attitudes change, and the implications this could have for the political landscape of the United States— however, what he is truly measuring is how people respond to his specific survey questions, which required responses on a scale of 1-5 and were aggregated and scaled to a total out of 15. What if he asked people to respond on a scale of 1-3, or a scale of 1-30? We do not mean to say that his choices were unreasonable — rather, we think it is important to note that he would have gotten very different answers using different reasonable choices. **If you're running Trump's 2020 campaign, you don't care about how people filled out Enos' specific survey. You care about the statistics that data claims to represent**.
 
-It is always important to keep the problem of validity in the back of our minds as we investigate data sets and how the data within these sets are collected.
+It is always important to keep the problem of validity in the back of our minds as we investigate data sets and how the data within these sets are collected. Given the many factors — those we are aware of and those we are not aware of — that go into any kind of data collection, there is no way to guarantee 100 percent validity.
+
+<!-- EM: Is the above statement true? --> 
 
 <!-- Will the term "prediction game" be brought up earlier in PPBDS? -->
 
@@ -571,8 +566,6 @@ Regardless of whether we use confidence or prediction intervals for these unknow
 
 Clearly, using the same control and treatment values to fill in the unknowns doesn't capture the entire picture. While using `lm()` to fill in the `att_end` unknowns towards the center of the distribution, it makes less sense for values towards the outskirts.
 
-<!--EM: unsure about reasoning behind this. It's only suspicious if we assume our ATE applies to each individual subject in a single direction, which I feel like is an unwarranted presumption. -->
-
 <!-- EM: Do we attach the uncertainty of the ATE equally to all subjects? Feel like it would change based on the known values we're extrapolating from. -->
 
 
@@ -606,17 +599,19 @@ tibble(subject = 1:7,
 
 <!-- EM: Unsure how to tie in probability -->
 
-## Uncertainties (Conclusion)
+## Uncertainties
 
+There are various sources of uncertainties and problems that have addressed in previous chapters and again in this chapter. It's important that you always have these in the back of your mind when working with data:
+
+1) 
+2) Parameter uncertainty.
+3) Unmodeled variation
 
 5) The world is changing, and people 50 years from now will act differently and have vastly different characteristics; in the case of the trains dataset, it wouldn't be unreasonable to expect completely different combinations of income and party affiliation. That would render our mean income, median ratio, and prediction intervals for both those measures useless.
-
-<!--Below is copy pasted from the style RMD-->
 
   + First, validity. Are the variables/numbers we have accurately capturing the concepts we care about.
   + Third, parameter uncertainty. Even if the model has correct form, we still need to estimate the parameters. We will never know them perfectly. If our forecasts assume that we do, then we will be over-confident. Example: Confidence interval for the mean.
   + Fourth, unmodeled variation. (This may be difficult to talk about since we don't (?) write down formulas with error terms.) Even if we have perfect parameter estimates for a model structure which matches the unknown data generating mechanism, we still won't make perfect predictions. Some randomness is intrinsic. Example: prediction for an individual.
-  + Fifth, unknown unknowns. What we really care about is data we haven't seen yet, mostly data from tomorrow. But what if the world changes, as it always does? If it doesn't change much, maybe we are OK. If it changes a lot, then what good will our model be? In general, the world changes some. That means that are forecasts are more uncertain that a naive use of our model might suggest.
 
 ## Testing is Evil
 
