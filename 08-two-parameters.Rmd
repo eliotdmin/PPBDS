@@ -45,7 +45,7 @@ glimpse(trains)
 
 Here, we can see variables that indicate each respondent's gender, political affiliation, age, and income. Additionally, we have variables that indicate whether a subject was in the control or treatment group, and the attitudes before or after the study in each of these subjects. Remember that for the `att_start` and `att_end` variables, a higher number means to a more conservative political standing and, correspondingly, a more exclusionary stance on immigration into the United States.
 
-Although the att_start and att_end variables are central to Enos' experiment, we will now focus our attention to the relationship between the `income` and `party` variable. The reason for investigating this instead of att_start and att_end will become clear later in the chapter. Furthermore, instead of investigating a single parameter of comparison like we did in chapter 7, we will incorporate the use of *two parameters* to create a holistic picture of how these two variables are related. How do our estimates and predictions regarding income change when we identify a specific party we want to work with within the data?
+Although the `att_start` and `att_end` variables are central to Enos' experiment, we will now focus our attention to the relationship between the `income` and `party` variable. The reason for investigating this instead of att_start and att_end will become clear later in the chapter. Furthermore, instead of investigating a single parameter of comparison like we did in chapter 7, we will incorporate the use of *two parameters* to create a holistic picture of how these two variables are related. How do our estimates and predictions regarding income change when we identify a specific party we want to work with within the data?
 
 
 ## Estimate Income
@@ -73,9 +73,7 @@ median_income_value_republican <- median(trains %>% filter(party == "Republican"
 
 ```
 
-Recall how we constructed bootstrap distributions for select parameters through sampling with replacement in ch7. Through this bootstrapping process, we were able to construct *confidence intervals* for these parameters. Remember, confidence intervals are a tool to help us identify *parameter uncertainty*, which is the degree to which we are confident in these approximations of the true values — say, the true average income of all United States residents — using limited data.
-
-Using the limited data in the `trains` dataset as representative of homogeneous white populations of the United States, this type of resampling will allow us to pinpoint a *true value* for a given parameter with a certain degree of confidence — this could, for example, be the true average income of Boston commuters, or the true percentage of Boston commuters that are Republican (refer back to chapter 7 for a refresher on how this works out mathematically). 
+Recall how we constructed bootstrap distributions for select parameters through sampling with replacement in ch7. Through this bootstrapping process, we were able to construct *confidence intervals* for these parameters. Remember, confidence intervals are a tool to help us identify *parameter uncertainty*, which is the degree to which we are confident in these approximations of the *true values*, which are the real-life values we hope to capture through our work. Using the limited data in the `trains` dataset as representative of homogeneous white populations of the United States, bootstrap resampling will allow us to approximate a true value for any statistic with a certain degree of confidence — this could, for example, be the true average income of Boston commuters, or the true percentage of Boston commuters that are Republican (refer back to chapter 7 for a refresher on how this works out mathematically). 
 
 We will once again be using the `bootstraps()` function from the **rsample** package. You might think that since we're shifting to calculating two parameters of comparison, we might need to conduct the entire bootstrapping process twice, once for each parameter. However, it's much, much easier than that! We can actually calculate as many parameters as we need to for each replicate instead of doing a separate bootstrap for each parameter we want to track.
 
@@ -512,8 +510,6 @@ Recall that the Rubin Causal Model centers on filling in the unknowns, which are
 
 There's one way we could fill in the missing values — we could use our approximations we generated with our `lm()` model: that is, for each unknown Treated value, we use 10, and for each unknown Control value, we use 8.45. We also attach the uncertainty attached for these predictions.
 
-<!-- EM: Would I want to use prediction intervals here instead of confidence intervals? -->
-
 ```{r, echo = FALSE}
 
 tibble(subject = 1:7,
@@ -570,10 +566,9 @@ tibble(subject = 1:7,
 
 Regardless of whether we use confidence or prediction intervals for these unknowns, however, the table looks a bit funky: take a look at subject 3. According to this model, subject 3's attitude under control would be HIGHER than his/her attitude under treatment, which corresponds to a negative treatment effect. This would mean that he/she would become more LIBERAL after undergoing treatment, which flies in the face of the ATE we calculated earlier. Another example of this can be seen with subject 7, whose predicted `att_end` under treatment is lower than his/her `att_end` under control (also signifying a shift towards liberal attitudes regarding immigration). 
 
-Clearly, using the same control and treatment values to fill in the unknowns doesn't capture the entire picture. While using `lm()` to fill in the `att_end` unknowns towards the center of the distribution, it makes less sense for values towards the outskirts.
+Clearly, using the same control and treatment values to fill in the unknowns doesn't capture the entire picture. While using `lm()` to fill in the `att_end` unknowns towards the center of the distribution, it makes less sense for values towards the outskirts of the dataset. So, how can we predict outcomes in a way that equally addresses data towards the center of the distribution, and data that isn't?
 
-<!-- EM: Do we attach the uncertainty of the ATE equally to all subjects? Feel like it would change based on the known values we're extrapolating from. -->
-
+One such way is by attaching the ATE in the appropriate direction to fill in the unknowns. Here, we use lm() to calculate confidence intervals for the ATE, which we previously calculated to be `r ATE`, and add and subtract those from the known values to fill in the unknown values:
 
 ```{r, echo = FALSE}
 
