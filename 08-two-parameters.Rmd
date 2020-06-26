@@ -370,8 +370,6 @@ lm(data = trains, income ~ -1 + party) %>% tidy(conf.int = TRUE) %>% select(term
 
 Recall that the third parameter we calculated, `mean_income_difference`, represents the average difference between republican income and democrat income. If we wanted to analyze this difference, which can be modeled as the offset in income that exists specifically due to a subject being a republican instead of a democrat, we can remove the "-1" to get the `partyRepublican` term that demonstrates this difference:
 
-<!- -Above paragraph is clunky -->
-
 ```{r}
 
 lm(data = trains, income ~ party) %>% tidy(conf.int = TRUE) %>% select(term, estimate, conf.low, conf.high)
@@ -575,10 +573,18 @@ Clearly, using the same control and treatment values to fill in the unknowns doe
 
 ```{r, echo = FALSE}
 
+#This is necessary so we can see the offset as caused by treatmentTreated, not treatmentControl.
+
+trains$treatment <-fct_relevel(trains$treatment, "Control", "Treated")
+
+lm(data = trains, att_end ~ treatment) %>% tidy(conf.int = TRUE) %>%
+  select(term, estimate, conf.low, conf.high)
+
+
 tibble(subject = 1:7,
-       Control = c("9.45", "8.45", "3.45", "9.45", "5", "11.45", "13"),
+       Control = c("9.45 (8.42, 10.48)", "8.45 (7.42, 9.48)", "3.45 (2.42, 4.48)", "9.45 (8.42, 10.48)", "5", "11.45 (10.42, 12.48)", "13"),
        
-       Treated = c("11", "10", "5", "11", "6.55", "13", "14.55")) %>%
+       Treated = c("11", "10", "5", "11", "6.55 (5.52, 7.58)", "13", "14.55 (13.52, 15)")) %>%
   
   gt() %>%
   cols_label(subject = md("$$\\mathbf{Subject}$$"),
@@ -591,28 +597,7 @@ tibble(subject = 1:7,
   cols_align(align = "center", columns = TRUE) %>%
   tab_header(title = "Att_end of First Ten Respondents of Train Dataset")
 
-#This is necessary so we can see the offset as caused by treatmentTreated, not treatmentControl.
-
-trains$treatment <-fct_relevel(trains$treatment, "Control", "Treated")
-
-lm(data = trains, att_end ~ treatment) %>% tidy(conf.int = TRUE) %>%
-  select(term, estimate, conf.low, conf.high)
-
 ```
-
-<!-- Recall our earlier discussion regarding the difference between confidence intervals and prediction intervals: while the former accounts for *parameter uncertainty*, the latter accounts for *unmodeled variation*. We've already calculated the confidence intervals for the ATE, so let's go ahead and calculate the prediction intervals — in this case, the prediction intervals would give us a range of values that we'd expect treatment to have on a brand-new individual. -->
-
-<!-- ```{r} -->
-
-<!-- trains.lm <- lm(data = trains, att_end ~ -1 + treatment) -->
-
-<!-- newdata <- tibble(treatment = c("Control", "Treated")) -->
-
-<!-- predict(trains.lm, newdata, interval = "prediction") -->
-
-<!-- ``` -->
-
-<!-- Revisit the RCM set up from chapter 3. (Do this last and after Cassidy has finished the chapter so you can use her exact table without making it yourself.) First pass, our key estimand is the average att_end of people who are treated and the average att_end of the people in control. We really want to know this for all people, but we can't because we can't see both potential outcomes for each person. But, the average of what we can see is probably a good estimate, because of randomization. -->
 
 <!-- EM: Unsure how to tie in probability -->
 
