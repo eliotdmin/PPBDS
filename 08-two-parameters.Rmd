@@ -124,11 +124,13 @@ ggplot(x, aes(x = mean_income)) +
 
 ```
 
+Hopefully, this was a helpful recap of what was covered in chapter 7.
+
+## Two Parameters
+
 We've calculated the mean income for each bootstrapped replicate and constructed a nice distribution graphic for it — and this is all well and good, but it's exactly the same thing that we did back in ch7. Extending our analysis of income to two parameters would allow us to investigate new trends and patterns in the data. 
 
 What if we wanted to extend this calculation to distinguish between, say, democratic and republican subjects in Enos' study?
-
-## Two Parameters
 
 This will require a bit of additional work but will not require any more bootstrapping. First, we'll slightly modify the `get_mean_income()` function: we'll add an input to the function, `whichParty`, that will allow the function to distinguish between subjects that identified as democrat and those that identified as republican.
 
@@ -248,6 +250,10 @@ One thing we can notice right away is the wider spread of `mean_income_republica
 
 In short: If we have fewer data points, bootstrap parameter calculations are more likely to be further from the true values, and our confidence intervals will be wider as a result. It's important to understand the mechanics behind these relationships as we continue our work with confidence intervals going forward.
 
+## Bootstrapping as it relates to probability
+
+
+
 ## Calculating a third parameter
 
 Now, the above graph looks a bit messy: trying to graph two distributions on the same graph often can turn out this way. So, how might we go about simplifying the graph but still show the differences in distributions?
@@ -355,8 +361,9 @@ Since there was some degree of rounding done to calculate income in the data, th
 
 <!-- Explain how the above is a bit of a cheat since linear functions are special: the average difference is the same as the difference between the averages. This is an important point. But there are lots of things which are not like that! Consider the income ratio between the median treated and median control. This is something which, a priori, I might be as interested in as the difference in means. But the ratio of the medians is not the same thing as the median of the ratios! This is a key point. In order to calculate this, we need to, again, take the bootstrap and, in each bootstrap sample, calculate the median income of the treated, the median income of the controls, and record that ratio. We then save that ratio and look at its bootstrap distribution at the end of the exercise. -->
 
+<!-- EM: I feel like having "Estimate other things" and "Estimate trickier things" are redundant as chapter sections because they are mostly addressed through the sections that sandwich them.  -->
 
-## Using `lm()` and `stan_glm()`
+## Using `lm()`
 
 The bootstrapping process is a fantastic way to generate confidence intervals, but luckily for us, R has built-in functions that make the process of calculating confidence intervals much quicker. Recall the `lm()` and `tidy()` functions, which were used extensively in ch7.
 
@@ -395,8 +402,6 @@ lm(data = trains, income ~ party) %>% summary()
 ```
 
 The residual standard error term corresponds to the variation in individual data — more specifically, it is the average deviation from the true regression line across all the data points in the trains dataset. This variation is omitted when generating confidence intervals for mean income, as those calculations only deal with *averages across and not the range of the data*. 
-
-<!-- Not sure exactly how the confidence interval part of lm works out? I know how to justify this variation being omitted when we bootstrapped but not with lm() -->
 
 Therefore, while we are 95% certain that the mean income falls inbetween the confidence intervals we generated, we are less than 95% sure that any given person's income falls within that range. This added uncertainty is called *unmodeled variation*, and it becomes relevant when we use our models to analyze and predict individual data points instead of summary statistics.
 
