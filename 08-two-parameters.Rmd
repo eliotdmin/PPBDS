@@ -21,7 +21,7 @@ output_yaml:
 
 <!--  Point out that att_start is not something we will use in this chapter, but will use later. This is a brie f warm up. Don't need to explore each variable in detail. All we are using is `treatment` and `income`. -->
 
-Recall the trains dataset from Enos (2014) that was first introduced in Chapter 3 in the context of the Rubin Causal Model. In this study, Enos and his team randomly placed Spanish-speaking confederates in nine train stations around Boston, MA. They examined how exposure to Spanish-speakers -- the `treatment` -- influenced attitudes toward immigration. These reactions were measured through changes in exclusionary attitudes regarding immigration. 
+Here, we'll be introducing the `trains` dataset from Enos (2014). In this study, Enos and his team randomly placed Spanish-speaking confederates in nine train stations around Boston, MA. They examined how exposure to Spanish-speakers -- the `treatment` -- influenced attitudes toward immigration. These reactions were measured through changes in exclusionary attitudes regarding immigration. 
 
 ```{r, message=FALSE}
 library(PPBDS.data)
