@@ -12,14 +12,18 @@ _bookdown_files
 .DS_Store
 **/.DS_Store
 
+# I get annoyed at checking in a libs/ folder everywhere, but you do need one in docs/.
+**/*libs
+!docs/libs/
+
+# We need Preceptor’s-Primer-for-Bayesian-Data-Science_files in docs/.
 **/*_files/
+!docs/Preceptor’s-Primer-for-Bayesian-Data-Science_files/
+
 **/*log
 **/*tex
-**/*libs
+
 **/storage
 
 **/rsconnect
 
-docs/
-
-junk/
